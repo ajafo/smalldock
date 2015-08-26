@@ -6,9 +6,9 @@ This is simple small docker images manager. You can run many instances with outg
 
 #Dependencies
 You need python-docker:
-
+```
 pip install python-docker
-
+```
 
 #How it works
 Just run smalldock.py script. It read configuration and check working machines. After this start reading docker events stream.
