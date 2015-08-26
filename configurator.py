@@ -49,7 +49,7 @@ class ConfigFactory(object):
 
     def show_config_all(self):
         for (char, n) in self.li.items():
-	        print "key:",char,"value:",n
+	        print "key: ",char,"value: ",n
 
     def show_config(self,type,version):
         self.li[type][version].showIntIp()
