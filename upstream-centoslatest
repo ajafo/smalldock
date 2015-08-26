@@ -1,0 +1,3 @@
+upstream-centos{
+server 172.17.0.8;
+}

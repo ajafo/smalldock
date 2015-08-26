@@ -58,12 +58,17 @@ class ConfigFactory(object):
 
 
     def generate_upstrean(self,inst,id,inst_ver):
-        plik = open('upstream-'+inst + "-" + inst_ver + ".conf", 'w')
-        plik.write("upstream-"+inst+"{\r\n")
+        inst2=inst.replace('/','-')
+        print inst2
+        plik = open('upstream-'+inst2 + "-" + inst_ver + ".conf", 'w')
+        plik.write("upstream-"+inst2+"{\r\n")
         c=self.li[inst][inst_ver]
-        for (char, n) in c.int_ip.items():
-            plik.write("server "+ n +";\r\n")
-        plik.write("}")
+        if not c.int_ip.items:
+            plik.write("server 127.0.0.1;\r\n")
+        else:
+            for (char, n) in c.int_ip.items():
+                plik.write("server "+ n +";\r\n")
+            plik.write("}")
         plik.close()
 
 
