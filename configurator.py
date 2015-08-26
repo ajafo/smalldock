@@ -19,8 +19,6 @@ class ConfigFactory(object):
     li = {}
     #ip=settings.get('smtp-dev','ip')
 
-
-
     def __init__(self):
 
         settings = ConfigParser.ConfigParser()
@@ -34,8 +32,13 @@ class ConfigFactory(object):
             image=settings.get(sec,'image')
             ip=settings.get(sec,'ext_ip')
             port=settings.get(sec,'port')
-            c = imgtype(sec,ip,port,image)
-            self.li[sec] = c
+            version=settings.get(sec,'version')
+            onstart=settings.get(sec,'onstart')
+            c = imgtype(sec,ip,port,image,version,onstart)
+            tup = {version:c}
+            self.li[sec] = tup
+
+
 
 
 
@@ -48,16 +51,16 @@ class ConfigFactory(object):
         for (char, n) in self.li.items():
 	        print "klucz:",char,"wartosc:",n
 
-    def show_config(self,type):
-        self.li[type].showIntIp()
+    def show_config(self,type,version):
+        self.li[type][version].showIntIp()
 
 
 
 
-    def generate_upstrean(self,inst,id):
-        plik = open('upstream-'+inst, 'w')
+    def generate_upstrean(self,inst,id,inst_ver):
+        plik = open('upstream-'+inst + "-" + inst_ver + ".conf", 'w')
         plik.write("upstream-"+inst+"{\r\n")
-        c=self.li[inst]
+        c=self.li[inst][inst_ver]
         for (char, n) in c.int_ip.items():
             plik.write("server "+ n +";\r\n")
         plik.write("}")
