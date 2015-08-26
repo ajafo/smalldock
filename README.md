@@ -7,7 +7,7 @@ This is simple small docker images manager. You can run many instances with outg
 #Dependencies
 You need python-docker:
 ```
-pip install python-docker
+pip install docker-py
 ```
 
 #How it works
