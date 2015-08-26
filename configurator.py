@@ -17,7 +17,7 @@ class Singleton(type):
 class ConfigFactory(object):
     __metaclass__ = Singleton
     li = {}
-    #ip=settings.get('smtp-dev','ip')
+
 
     def __init__(self):
 

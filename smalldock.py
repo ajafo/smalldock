@@ -34,7 +34,6 @@ def print_config():
 def startInstance(inst,id,inst_ver):
      print inst
      cnf=dock.inspect_container(id)
-     #print cnf
      ip_wew=cnf['NetworkSettings']['IPAddress']
      conf.li[inst][inst_ver].showIntIp
      conf.li[inst][inst_ver].addIntIp(id,ip_wew)
@@ -61,10 +60,7 @@ def stopInstance(inst,id,version):
          print "This machine have no IP to remove"
 
 
-#print type(conf.li["centos"]["latest"])
-#print_config()
-#getSystemContainters()
-#conf.show_config("centos","latest")
+
 
 def runInstances(inst,ver,count):
     print 'Start instance ' + inst + ":" + ver, count
@@ -91,10 +87,8 @@ getSystemContainters()
 
 
 for line in dock.events():
-     #print(json.dumps(json.loads(line), indent=4))
-     #d=json.dumps(json.loads(line), indent=4)
      d=json.loads(line)
-     #print d["status"]
+
 
      instli=d["from"].split(':')
      inst_name=instli[0]
