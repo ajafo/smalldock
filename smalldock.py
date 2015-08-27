@@ -94,7 +94,9 @@ for (c,d) in conf.li.items():
 
 
 
-
+for (inst_name,d) in conf.li.items():
+    upstream_file=conf.li[inst_name].getUpFile()
+    conf.generate_upstrean(inst_name,d.showIntIp(),'latest',upstream_file)
 
 
 
