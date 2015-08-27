@@ -57,7 +57,7 @@ def stopInstance(inst,id,version):
          executor.delIpRule(ip_wew,ip_zew)
          conf.li[inst][version].removeExtIp(id)
      else:
-         print "This machine have no IP to remove"
+         print "This machine have no IP to remove "
 
 
 
