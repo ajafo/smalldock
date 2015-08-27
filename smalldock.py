@@ -19,6 +19,7 @@ conf.show_config_all()
 
 def instance_monitor():
     while True:
+        time.sleep(180)
         for (c,d) in conf.li.items():
             if d.toStartInst() != 0:
                 thread = threading.Thread(target=runInstances, args=(c,'latest',d.toStartInst()))
@@ -26,7 +27,7 @@ def instance_monitor():
                 thread.start()
             else:
                 print "All Instances OK"
-        time.sleep(180)
+
 
 
 
