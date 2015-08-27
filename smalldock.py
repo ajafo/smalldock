@@ -37,27 +37,27 @@ def startInstance(inst,id,inst_ver):
      print inst
      cnf=dock.inspect_container(id)
      ip_wew=cnf['NetworkSettings']['IPAddress']
-     conf.li[inst][inst_ver].showIntIp()
-     conf.li[inst][inst_ver].addIntIp(id,ip_wew)
+     conf.li[inst].showIntIp()
+     conf.li[inst].addIntIp(id,ip_wew)
 
-     if conf.li[inst][inst_ver].ip_pool[0] is not "0":
-         ip_zew=conf.li[inst][inst_ver].getFreeIp()
+     if conf.li[inst].ip_pool[0] is not "0":
+         ip_zew=conf.li[inst].getFreeIp()
          print 'Assign external IP: ' + ip_zew
          executor.addIpRule(ip_wew,ip_zew)
-         conf.li[inst][inst_ver].addExtIp(id,ip_zew)
+         conf.li[inst].addExtIp(id,ip_zew)
      else:
          print "This machine have no IP assigned"
 
 
 def stopInstance(inst,id,version):
-     ip_wew=conf.li[inst][version].getIntIP(id)
+     ip_wew=conf.li[inst].getIntIP(id)
      print ip_wew
-     conf.li[inst][version].removeIntIp(id)
-     if conf.li[inst][inst_ver].ip_pool[0] is not "0":
-         ip_zew=conf.li[inst][inst_ver].getExtIp(id)
+     conf.li[inst].removeIntIp(id)
+     if conf.li[inst].ip_pool[0] is not "0":
+         ip_zew=conf.li[inst].getExtIp(id)
          print 'Deassign external IP: ' + ip_zew
          executor.delIpRule(ip_wew,ip_zew)
-         conf.li[inst][version].removeExtIp(id)
+         conf.li[inst].removeExtIp(id)
      else:
          print "This machine have no IP to remove "
 
@@ -83,14 +83,14 @@ def runInstances(inst,ver,count):
 
 
 
-for (i, n) in conf.li.items():
-    for (c,d) in n.items():
-        thread = threading.Thread(target=runInstances, args=(i,c,d.toStartInst()))
-        thread.daemon = True
-        thread.start()
+
+for (c,d) in conf.li.items():
+   thread = threading.Thread(target=runInstances, args=(c,'latest',d.toStartInst()))
+   thread.daemon = True
+   thread.start()
 
 
-getSystemContainters()
+#getSystemContainters()
 
 
 
@@ -106,7 +106,7 @@ for line in dock.events():
      instli=d["from"].split(':')
      inst_name=instli[0]
      inst_ver=instli[1]
-     upstream_file=conf.li[inst_name][inst_ver].getUpFile()
+     upstream_file=conf.li[inst_name].getUpFile()
 
      print upstream_file
      print inst_name

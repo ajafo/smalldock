@@ -38,8 +38,8 @@ class ConfigFactory(object):
             upfile=settings.get(sec,'upfile')
             if active == "1":
                 c = imgtype(sec,ip,port,image,version,onstart,upfile)
-                tup = {version:c}
-                self.li[sec] = tup
+                #tup = {version:c}
+                self.li[sec] = c
             else:
                 print "Found not active configuration: " + image + ":" + version + " " + ip + " " + onstart
 
@@ -57,7 +57,7 @@ class ConfigFactory(object):
 	        print "key: ",char,"value: ",n
 
     def show_config(self,type,version):
-        self.li[type][version].showIntIp()
+        self.li[type].showIntIp()
 
 
 
@@ -70,7 +70,7 @@ class ConfigFactory(object):
         #plik = open('upstream-'+inst2 + ".conf", 'w')
         plik = open(upstream_file,'w')
         plik.write("upstream "+inst2+"{\r\n")
-        c=self.li[inst][inst_ver]
+        c=self.li[inst]
         print "---->", len(c.int_ip.items())
         if len(c.int_ip.items()) == "0":
             plik.write("server 127.0.0.1:8080;\r\n")
