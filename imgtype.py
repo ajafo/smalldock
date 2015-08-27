@@ -5,7 +5,7 @@ class imgtype:
 
 
 
-    def __init__(self, name,ip,port,image,version,onstart):
+    def __init__(self, name,ip,port,image,version,onstart,upfile):
          self.name = name
          self.ip_pool = ip.split(',')
          self.port = port
@@ -15,6 +15,7 @@ class imgtype:
          self.ip_counter=-1
          self.ext_ip = {}
          self.onstart = onstart
+         self.upfile = upfile
 
 
     def addExtIp(self,id,ip):
@@ -31,6 +32,9 @@ class imgtype:
 
     def getIntIP(self,id):
         return self.int_ip[id]
+
+    def getUpFile(self):
+        return self.upfile
 
     def showIntIp(self):
         print self.int_ip

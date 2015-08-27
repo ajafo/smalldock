@@ -64,12 +64,24 @@ def stopInstance(inst,id,version):
 
 
 
+
+
+
+
+
+
 def runInstances(inst,ver,count):
     print 'Start instance ' + inst + ":" + ver, count
     for c in range(0,int(count)):
         container = dock.create_container(image=inst + ":" + ver)
         response = dock.start(container=container.get('Id'))
         print response
+
+
+
+
+
+
 
 for (i, n) in conf.li.items():
     for (c,d) in n.items():
@@ -78,11 +90,11 @@ for (i, n) in conf.li.items():
         thread.start()
 
 
-
-
-
-
 getSystemContainters()
+
+
+
+
 
 
 
@@ -91,22 +103,25 @@ getSystemContainters()
 for line in dock.events():
      d=json.loads(line)
 
-
      instli=d["from"].split(':')
      inst_name=instli[0]
      inst_ver=instli[1]
+     upstream_file=conf.li[inst_name][inst_ver].getUpFile()
 
+     print upstream_file
+     print inst_name
+     print inst_ver
 
      if d["status"] == "start":
           print "start action"
           startInstance(inst_name,d["id"],inst_ver)
           conf.show_config(inst_name,inst_ver)
-          conf.generate_upstrean(inst_name,d["id"],inst_ver)
+          conf.generate_upstrean(inst_name,d["id"],inst_ver,upstream_file)
      elif d["status"] == "die":
           print "die action"
           stopInstance(inst_name,d["id"],inst_ver)
           conf.show_config(inst_name,inst_ver)
-          conf.generate_upstrean(inst_name,d["id"],inst_ver)
+          conf.generate_upstrean(inst_name,d["id"],inst_ver,upstream_file)
 
 
 

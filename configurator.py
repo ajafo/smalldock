@@ -35,8 +35,9 @@ class ConfigFactory(object):
             version=settings.get(sec,'version')
             onstart=settings.get(sec,'onstart')
             active=settings.get(sec,'active')
+            upfile=settings.get(sec,'upfile')
             if active == "1":
-                c = imgtype(sec,ip,port,image,version,onstart)
+                c = imgtype(sec,ip,port,image,version,onstart,upfile)
                 tup = {version:c}
                 self.li[sec] = tup
             else:
@@ -61,16 +62,20 @@ class ConfigFactory(object):
 
 
 
-    def generate_upstrean(self,inst,id,inst_ver):
+    def generate_upstrean(self,inst,id,inst_ver,upstream_file):
         inst2=inst.replace('/','-')
+        print "generate conf file: "
         print inst2
-        plik = open('upstream-'+inst2 + ".conf", 'w')
+        print inst_ver
+        #plik = open('upstream-'+inst2 + ".conf", 'w')
+        plik = open(upstream_file,'w')
         plik.write("upstream-"+inst2+"{\r\n")
         c=self.li[inst][inst_ver]
         if not c.int_ip.items:
             plik.write("server 127.0.0.1;\r\n")
         else:
             for (char, n) in c.int_ip.items():
+                print "Add server: " + n
                 plik.write("server "+ n +";\r\n")
             plik.write("}")
         plik.close()
