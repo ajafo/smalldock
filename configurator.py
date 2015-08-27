@@ -78,7 +78,7 @@ class ConfigFactory(object):
             for (char, n) in c.int_ip.items():
                 print "Add server: " + n
                 plik.write("server "+ n +";\r\n")
-            plik.write("}")
+        plik.write("}")
         plik.close()
 
 
