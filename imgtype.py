@@ -16,6 +16,7 @@ class imgtype:
          self.ext_ip = {}
          self.onstart = onstart
 
+
     def addExtIp(self,id,ip):
         self.ext_ip[id]=ip
 

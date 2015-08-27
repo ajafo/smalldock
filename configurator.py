@@ -34,9 +34,13 @@ class ConfigFactory(object):
             port=settings.get(sec,'port')
             version=settings.get(sec,'version')
             onstart=settings.get(sec,'onstart')
-            c = imgtype(sec,ip,port,image,version,onstart)
-            tup = {version:c}
-            self.li[sec] = tup
+            active=settings.get(sec,'active')
+            if active == "1":
+                c = imgtype(sec,ip,port,image,version,onstart)
+                tup = {version:c}
+                self.li[sec] = tup
+            else:
+                print "Found not active configuration: " + image + ":" + version + " " + ip + " " + onstart
 
 
 
