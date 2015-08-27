@@ -67,3 +67,6 @@ class imgtype:
             return ile
         else:
             print "It's enough instances"
+
+    def getPort(self):
+        return self.port

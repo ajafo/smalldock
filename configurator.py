@@ -67,16 +67,16 @@ class ConfigFactory(object):
         print "generate conf file: "
         print inst2
         print inst_ver
-        #plik = open('upstream-'+inst2 + ".conf", 'w')
+
         plik = open(upstream_file,'w')
         plik.write("upstream "+inst2+"{\r\n")
         c=self.li[inst]
-        print "---->", len(c.int_ip.items())
+
 
         if len(c.int_ip.items()) > 0:
             for (char, n) in c.int_ip.items():
                 print "Add server: " + n
-                plik.write("server "+ n +":8080;\r\n")
+                plik.write("server "+ n +":" + c.getPort() + ";\r\n")
         else:
             plik.write("server 127.0.0.1:8080;\r\n")
         plik.write("}")

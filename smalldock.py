@@ -111,17 +111,22 @@ executor.nginxRestart()
 
 
 
+
+
 for line in dock.events():
      d=json.loads(line)
-     if ':' in d["from"]:
-        instli=d["from"].split(':')
-        inst_name=instli[0]
-        inst_ver=instli[1]
-     else:
-         inst_name=d["from"]
-         inst_ver='rebuild_start_die'
+
+
 
      if d["status"] == "start":
+          if ':' in d["from"]:
+             instli=d["from"].split(':')
+             inst_name=instli[0]
+             inst_ver=instli[1]
+          else:
+             inst_name=d["from"]
+             inst_ver='rebuild_start_die'
+
           if inst_name in conf.li.keys():
               print "start action"
               upstream_file=conf.li[inst_name].getUpFile()
@@ -132,6 +137,14 @@ for line in dock.events():
           else:
               print "There is no configuration for: " + inst_name + ":" + inst_ver
      elif d["status"] == "die":
+          if ':' in d["from"]:
+             instli=d["from"].split(':')
+             inst_name=instli[0]
+             inst_ver=instli[1]
+          else:
+             inst_name=d["from"]
+             inst_ver='rebuild_start_die'
+
           if inst_name in conf.li.keys():
               print "die action"
               stopInstance(inst_name,d["id"],inst_ver)
