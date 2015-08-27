@@ -65,7 +65,7 @@ def stopInstance(inst,id,version):
 def runInstances(inst,ver,count):
     print 'Start instance ' + inst + ":" + ver, count
     for c in range(0,int(count)):
-        container = dock.create_container(image=inst + ":" + ver,command='/bin/sleep 30' )
+        container = dock.create_container(image=inst + ":" + ver)
         response = dock.start(container=container.get('Id'))
         print response
 
