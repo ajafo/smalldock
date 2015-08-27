@@ -37,7 +37,7 @@ def startInstance(inst,id,inst_ver):
      print inst
      cnf=dock.inspect_container(id)
      ip_wew=cnf['NetworkSettings']['IPAddress']
-     conf.li[inst][inst_ver].showIntIp
+     conf.li[inst][inst_ver].showIntIp()
      conf.li[inst][inst_ver].addIntIp(id,ip_wew)
 
      if conf.li[inst][inst_ver].ip_pool[0] is not "0":

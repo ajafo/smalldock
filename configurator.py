@@ -64,7 +64,7 @@ class ConfigFactory(object):
     def generate_upstrean(self,inst,id,inst_ver):
         inst2=inst.replace('/','-')
         print inst2
-        plik = open('upstream-'+inst2 + "-" + inst_ver + ".conf", 'w')
+        plik = open('upstream-'+inst2 + ".conf", 'w')
         plik.write("upstream-"+inst2+"{\r\n")
         c=self.li[inst][inst_ver]
         if not c.int_ip.items:
