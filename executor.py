@@ -17,4 +17,9 @@ def delIpRule(ip_wew,ip_zew):
     print TheCommand
     os.system(TheCommand)
 
+def nginxRestart():
+    TheCommand = 'service nginx restart'
+    print TheCommand
+    os.system(TheCommand)
+
 
