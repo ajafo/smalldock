@@ -117,11 +117,12 @@ for line in dock.events():
           startInstance(inst_name,d["id"],inst_ver)
           conf.show_config(inst_name,inst_ver)
           conf.generate_upstrean(inst_name,d["id"],inst_ver,upstream_file)
+          executor.nginxRestart()
      elif d["status"] == "die":
           print "die action"
           stopInstance(inst_name,d["id"],inst_ver)
           conf.show_config(inst_name,inst_ver)
           conf.generate_upstrean(inst_name,d["id"],inst_ver,upstream_file)
-
+          executor.nginxRestart()
 
 
