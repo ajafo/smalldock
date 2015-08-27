@@ -73,11 +73,11 @@ class ConfigFactory(object):
         c=self.li[inst][inst_ver]
         print "---->", len(c.int_ip.items())
         if len(c.int_ip.items()) == "0":
-            plik.write("server 127.0.0.1;\r\n")
+            plik.write("server 127.0.0.1:8080;\r\n")
         else:
             for (char, n) in c.int_ip.items():
                 print "Add server: " + n
-                plik.write("server "+ n +";\r\n")
+                plik.write("server "+ n +"8080;\r\n")
         plik.write("}")
         plik.close()
 
