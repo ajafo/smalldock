@@ -22,7 +22,7 @@ def instance_monitor():
         time.sleep(180)
         for (c,d) in conf.li.items():
             if d.toStartInst() != 0:
-                thread = threading.Thread(target=runInstances, args=(c,'latest',d.toStartInst()))
+                thread = threading.Thread(target=runInstances, args=(c, 'latest', d.toStartInst()))
                 thread.daemon = True
                 thread.start()
             else:
@@ -50,7 +50,6 @@ def print_config():
 
 
 def startInstance(inst,id,inst_ver):
-     print inst
      if inst in conf.li.keys():
          cnf=dock.inspect_container(id)
          ip_wew=cnf['NetworkSettings']['IPAddress']
@@ -162,6 +161,7 @@ for line in dock.events():
 
           if inst_name in conf.li.keys():
               print "die action"
+              upstream_file=conf.li[inst_name].getUpFile()
               stopInstance(inst_name,d["id"],inst_ver)
               conf.show_config(inst_name,inst_ver)
               conf.generate_upstrean(inst_name,d["id"],inst_ver,upstream_file)
