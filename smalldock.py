@@ -26,7 +26,7 @@ def instance_monitor():
                 thread.start()
             else:
                 print "All Instances OK"
-        time.sleep(5)
+        time.sleep(180)
 
 
 
