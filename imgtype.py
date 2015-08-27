@@ -60,10 +60,12 @@ class imgtype:
         return len(self.int_ip)
 
     def toStartInst(self):
+        print "Working " + self.name + " instances: ", len(self.int_ip.items())
+        print "Should be: " +  self.onstart
         if len(self.int_ip) == 0:
             return self.onstart
         elif len(self.int_ip) <= self.onstart:
-            ile=self.onstart - len(self.int_ip)
+            ile=int(self.onstart) - len(self.int_ip)
             return ile
         else:
             print "It's enough instances"

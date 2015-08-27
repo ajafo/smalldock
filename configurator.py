@@ -55,6 +55,7 @@ class ConfigFactory(object):
     def show_config_all(self):
         for (char, n) in self.li.items():
 	        print "key: ",char,"value: ",n
+                print "IP table for " + char + ":", n.showIntIp()
 
     def show_config(self,type,version):
         self.li[type].showIntIp()
@@ -64,9 +65,7 @@ class ConfigFactory(object):
 
     def generate_upstrean(self,inst,id,inst_ver,upstream_file):
         inst2=inst.replace('/','-')
-        print "generate conf file: "
-        print inst2
-        print inst_ver
+        print "Generate conf file for: " + inst2 +":" +  inst_ver
 
         plik = open(upstream_file,'w')
         plik.write("upstream "+inst2+"{\r\n")
@@ -75,7 +74,7 @@ class ConfigFactory(object):
 
         if len(c.int_ip.items()) > 0:
             for (char, n) in c.int_ip.items():
-                print "Add server: " + n
+                print "Add server: " + n + " (instance: " + char
                 plik.write("server "+ n +":" + c.getPort() + ";\r\n")
         else:
             plik.write("server 127.0.0.1:8080;\r\n")

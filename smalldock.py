@@ -5,15 +5,28 @@ import json
 import docker
 import executor
 import threading
+import time
 from configurator import ConfigFactory
 
 
-dock = docker.Client(base_url='unix://var/run/docker.sock', version='1.9', timeout=10)
+dock = docker.Client(base_url='unix://var/run/docker.sock', version='1.12', timeout=10)
 print "number of containers = ", len(dock.containers(all))
 print "docker version is python ", docker.version
 
 conf = ConfigFactory()
 conf.show_config_all()
+
+
+def instance_monitor():
+    while True:
+        for (c,d) in conf.li.items():
+            if d.toStartInst() != 0:
+                thread = threading.Thread(target=runInstances, args=(c,'latest',d.toStartInst()))
+                thread.daemon = True
+                thread.start()
+            else:
+                print "All Instances OK"
+        time.sleep(5)
 
 
 
@@ -89,7 +102,7 @@ def runInstances(inst,ver,count):
 
 
 
-
+getSystemContainters()
 
 
 for (c,d) in conf.li.items():
@@ -98,7 +111,7 @@ for (c,d) in conf.li.items():
    thread.start()
 
 
-getSystemContainters()
+
 
 
 
@@ -109,15 +122,16 @@ for (inst_name,d) in conf.li.items():
 executor.nginxRestart()
 
 
+mon_thread = threading.Thread(target=instance_monitor)
+mon_thread.daemon = True
+mon_thread.start()
 
 
 
+conf.show_config_all()
 
 for line in dock.events():
      d=json.loads(line)
-
-
-
      if d["status"] == "start":
           if ':' in d["from"]:
              instli=d["from"].split(':')
