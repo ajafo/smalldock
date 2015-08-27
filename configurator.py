@@ -69,7 +69,7 @@ class ConfigFactory(object):
         print inst_ver
         #plik = open('upstream-'+inst2 + ".conf", 'w')
         plik = open(upstream_file,'w')
-        plik.write("upstream-"+inst2+"{\r\n")
+        plik.write("upstream "+inst2+"{\r\n")
         c=self.li[inst][inst_ver]
         if not c.int_ip.items:
             plik.write("server 127.0.0.1;\r\n")
