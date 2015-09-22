@@ -157,7 +157,7 @@ def runInstances(inst, ver, count, vol,hosts,hostname):
 
 
             command = "docker run -d " + hostname + volumes_dirs + host_tab + " " + \
-                      inst + ":" + ver + " /bin/sleep 30"
+                      inst + ":" + ver
             print command
             os.system(command)
 
