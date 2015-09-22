@@ -21,10 +21,10 @@ conf.show_config_all()
 
 def instance_monitor():
     while True:
-        time.sleep(60)
+        time.sleep(15)
         for (c,d) in conf.li.items():
             if d.toStartInst() != 0:
-                thread = threading.Thread(target=runInstances, args=(c, d.getVersion(), d.toStartInst(),d.getVolumes()))
+                thread = threading.Thread(target=runInstances, args=(c, d.getVersion(), d.toStartInst(),d.getVolumes(),d.getHosts()))
                 thread.daemon = True
                 thread.start()
             else:
