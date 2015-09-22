@@ -8,6 +8,9 @@ import threading
 import time
 import datetime
 import os
+import string
+import random
+
 from configurator import ConfigFactory
 
 
@@ -24,7 +27,7 @@ def instance_monitor():
         time.sleep(15)
         for (c,d) in conf.li.items():
             if d.toStartInst() != 0:
-                thread = threading.Thread(target=runInstances, args=(c, d.getVersion(), d.toStartInst(),d.getVolumes(),d.getHosts()))
+                thread = threading.Thread(target=runInstances, args=(c, d.getVersion(), d.toStartInst(),d.getVolumes(),d.getHosts(),d.getHostname()))
                 thread.daemon = True
                 thread.start()
             else:
@@ -91,7 +94,7 @@ def stopInstance(inst,id,version):
 
 
 
-def runInstances(inst, ver, count, vol,hosts):
+def runInstances(inst, ver, count, vol,hosts,hostname):
     if inst in conf.li.keys():
         print 'Start instance ' + inst + ":" + ver, count
         for c in range(0,int(count)):
@@ -137,6 +140,11 @@ def runInstances(inst, ver, count, vol,hosts):
             #print response
 
             #volumes workaround
+
+            if hostname != "":
+                #hostname='-h '.join(random.SystemRandom().choice(string.ascii_uppercase) for _ in range(N))
+                hostname = "-h " + hostname
+
             volumes_dirs = ""
             for v in vol:
                 volumes_dirs = volumes_dirs + " -v " + v
@@ -148,8 +156,8 @@ def runInstances(inst, ver, count, vol,hosts):
                 host_tab = host_tab + " --add-host " + h
 
 
-            command = "docker run -d " + volumes_dirs + host_tab + " " + \
-                      inst + ":" + ver
+            command = "docker run -d " + hostname + volumes_dirs + host_tab + " " + \
+                      inst + ":" + ver + " /bin/sleep 30"
             print command
             os.system(command)
 
@@ -163,7 +171,7 @@ getSystemContainters()
 
 
 for (c,d) in conf.li.items():
-   thread = threading.Thread(target=runInstances, args=(c,d.getVersion(),d.toStartInst(),d.getVolumes(),d.getHosts()))
+   thread = threading.Thread(target=runInstances, args=(c,d.getVersion(),d.toStartInst(),d.getVolumes(),d.getHosts(),d.getHostname()))
    thread.daemon = True
    thread.start()
 
