@@ -6,10 +6,12 @@ import docker
 import executor
 import threading
 import time
+import datetime
+import os
 from configurator import ConfigFactory
 
 
-dock = docker.Client(base_url='unix://var/run/docker.sock', version='1.12', timeout=10)
+dock = docker.Client(base_url='unix://var/run/docker.sock', version='1.19', timeout=10)
 print "number of containers = ", len(dock.containers(all))
 print "docker version is python ", docker.version
 
@@ -19,10 +21,10 @@ conf.show_config_all()
 
 def instance_monitor():
     while True:
-        time.sleep(180)
+        time.sleep(60)
         for (c,d) in conf.li.items():
             if d.toStartInst() != 0:
-                thread = threading.Thread(target=runInstances, args=(c, 'latest', d.toStartInst()))
+                thread = threading.Thread(target=runInstances, args=(c, d.getVersion(), d.toStartInst(),d.getVolumes()))
                 thread.daemon = True
                 thread.start()
             else:
@@ -89,13 +91,68 @@ def stopInstance(inst,id,version):
 
 
 
-def runInstances(inst,ver,count):
+def runInstances(inst, ver, count, vol,hosts):
     if inst in conf.li.keys():
         print 'Start instance ' + inst + ":" + ver, count
         for c in range(0,int(count)):
-            container = dock.create_container(image=inst + ":" + ver)
-            response = dock.start(container=container.get('Id'))
-            print response
+            print 'create container!'
+            print vol
+
+            #container=dock.create_container(image=inst + ":" + ver,hostname=None, user=None,
+                         #detach=False, stdin_open=False, tty=False,
+                         #mem_limit=None, ports=None, environment=None,
+                         #dns=None, volumes=vol, volumes_from=None,
+                         #network_disabled=False, name=None, entrypoint=None,
+                         #cpu_shares=None, working_dir=None, domainname=None,
+                         #memswap_limit=None, cpuset=None, host_config=None,
+                         #mac_address=None, labels=None, volume_driver=None)
+            #container = dock.create_container(image=inst + ":" + ver, command='/bin/sleep 90', volumes=['/mnt/vol1', '/mnt/vol2'])
+
+
+            #,volumes_from=[{"/tmp"},{"/test"}],volume_driver="local"
+            #print 'start container with params:'
+            #print container.get('volumes')
+            # binds={
+            #     '/test':
+            #         {
+            #             'bind': '/mnt/test',
+            #             'ro': False
+            #         },
+            #     '/var/www':
+            #         {
+            #             'bind': '/mnt/vol1',
+            #             'ro': True
+            #         }
+            # }
+            #response = dock.start(container=container.get('Id'),binds={
+            #                                   '/home/user1/': {
+            #                                        'bind': '/mnt/vol2',
+            #                                        'mode': 'rw',
+            #                                    },
+            #                                    '/var/www': {
+            #                                        'bind': '/mnt/vol1',
+            #                                        'mode': 'ro',
+            #                                     }}
+            #                                  )
+            #print response
+
+            #volumes workaround
+            volumes_dirs = ""
+            for v in vol:
+                volumes_dirs = volumes_dirs + " -v " + v
+            now_is = datetime.datetime.now().strftime("%Y.%m.%d.%H.%M.%S")
+            volumes_dirs=volumes_dirs.replace("[date]",now_is)
+            print volumes_dirs
+            host_tab = ""
+            for h in hosts:
+                host_tab = host_tab + " --add-host " + h
+
+
+            command = "docker run -d " + volumes_dirs + host_tab + " " + \
+                      inst + ":" + ver
+            print command
+            os.system(command)
+
     else:
         print "There is no configuration for: " + inst
 
@@ -106,7 +163,7 @@ getSystemContainters()
 
 
 for (c,d) in conf.li.items():
-   thread = threading.Thread(target=runInstances, args=(c,'latest',d.toStartInst()))
+   thread = threading.Thread(target=runInstances, args=(c,d.getVersion(),d.toStartInst(),d.getVolumes(),d.getHosts()))
    thread.daemon = True
    thread.start()
 
@@ -117,7 +174,7 @@ for (c,d) in conf.li.items():
 
 for (inst_name,d) in conf.li.items():
     upstream_file=conf.li[inst_name].getUpFile()
-    conf.generate_upstrean(inst_name,d.showIntIp(),'latest',upstream_file)
+    conf.generate_upstrean(inst_name,d.showIntIp(),d.getVersion(),upstream_file)
 
 executor.nginxRestart()
 

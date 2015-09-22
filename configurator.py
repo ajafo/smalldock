@@ -36,8 +36,20 @@ class ConfigFactory(object):
             onstart=settings.get(sec,'onstart')
             active=settings.get(sec,'active')
             upfile=settings.get(sec,'upfile')
+
+
+            if settings.has_option(sec,'hosts'):
+                hosts=settings.get(sec,'hosts')
+            else:
+                hosts=""
+
+            if settings.has_option(sec,'volumes'):
+                volumes=settings.get(sec,'volumes')
+            else:
+                volumes=""
+
             if active == "1":
-                c = imgtype(sec,ip,port,image,version,onstart,upfile)
+                c = imgtype(sec,ip,port,image,version,onstart,upfile,volumes,hosts)
                 #tup = {version:c}
                 self.li[sec] = c
             else:
