@@ -7,7 +7,7 @@ __author__ = 'ajafo'
 import docker
 import os
 
-dock = docker.Client(base_url='unix://var/run/docker.sock', version='1.19', timeout=10)
+dock = docker.Client(base_url='unix://var/run/docker.sock', version='1.18', timeout=10)
 
 
 idli={}
