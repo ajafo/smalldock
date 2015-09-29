@@ -31,14 +31,14 @@ def delIpRule(ip_wew,ip_zew):
 
 
 def getIpRules():
-    TheCommand = "/sbin/iptables -t nat --list | grep SNAT | tr -s ' '| cut -d ' ' -f4,6 > start_rules.txt"
+    TheCommand = "/sbin/iptables -t nat --list | grep SNAT | tr -s ' '| cut -d ' ' -f4,6 > start_rules-cleaner.txt"
     os.system(TheCommand)
 
 
 def parseIpTables():
     getIpRules()
     iptable={}
-    with open("start_rules.txt", "r") as f:
+    with open("start_rules-cleaner.txt", "r") as f:
         for tmpline in f:
             cutstring=tmpline.split('to:')
             cutstring[0]=cutstring[0][:-1]
