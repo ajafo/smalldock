@@ -39,7 +39,9 @@ def instance_monitor():
 def getSystemContainters():
         sc=dock.containers()
         for l in sc:
+
             instli=l["Image"].split(':')
+            print instli
             inst_name=instli[0]
             inst_ver=instli[1]
             id=l["Id"]
@@ -51,8 +53,9 @@ def print_config():
      print conf
      print dock.containers()
 
+tab_iptable=executor.parseIpTables()
 
-
+#print tab_iptable
 
 def startInstance(inst,id,inst_ver):
      if inst in conf.li.keys():
@@ -61,10 +64,15 @@ def startInstance(inst,id,inst_ver):
          conf.li[inst].showIntIp()
          conf.li[inst].addIntIp(id,ip_wew)
          if conf.li[inst].ip_pool[0] is not "0":
-              ip_zew=conf.li[inst].getFreeIp()
-              print 'Assign external IP: ' + ip_zew
-              executor.addIpRule(ip_wew,ip_zew)
-              conf.li[inst].addExtIp(id,ip_zew)
+             if tab_iptable.has_key(ip_wew):
+                 print "Iptables rule already set"
+                 ip_zew=tab_iptable[ip_wew]
+                 conf.li[inst].addExtIp(id,ip_zew)
+             else:
+                  ip_zew=conf.li[inst].getFreeIp()
+                  print 'Assign external IP: ' + ip_zew
+                  executor.addIpRule(ip_wew,ip_zew)
+                  conf.li[inst].addExtIp(id,ip_zew)
          else:
              print "This machine have no IP assigned"
      else:
@@ -168,6 +176,8 @@ def runInstances(inst, ver, count, vol,hosts,hostname):
 
 
 getSystemContainters()
+
+
 
 
 for (c,d) in conf.li.items():
