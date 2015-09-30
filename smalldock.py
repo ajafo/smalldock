@@ -155,7 +155,8 @@ def runInstances(inst, ver, count, vol,hosts,hostname):
 
             volumes_dirs = ""
             for v in vol:
-                volumes_dirs = volumes_dirs + " -v " + v
+                if v != "":
+                    volumes_dirs = volumes_dirs + " -v " + v
             now_is = datetime.datetime.now().strftime("%Y.%m.%d.%H.%M.%S")
             volumes_dirs=volumes_dirs.replace("[date]",now_is)
             print volumes_dirs
