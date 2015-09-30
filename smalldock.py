@@ -161,7 +161,9 @@ def runInstances(inst, ver, count, vol,hosts,hostname):
             print volumes_dirs
             host_tab = ""
             for h in hosts:
-                host_tab = host_tab + " --add-host " + h
+                if h != "":
+                    host_tab = host_tab + " --add-host " + h
+
 
 
             command = "docker run -d " + hostname + volumes_dirs + host_tab + " " + \
