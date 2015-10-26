@@ -53,8 +53,19 @@ class ConfigFactory(object):
             else:
                 volumes=""
 
+
+            if settings.has_option(sec,'env'):
+                env=settings.get(sec,'env')
+            else:
+                env=""
+
+            if settings.has_option(sec,'privileged'):
+                privileged=settings.get(sec,'privileged')
+            else:
+                privileged=""
+
             if active == "1":
-                c = imgtype(sec,ip,port,image,version,onstart,upfile,volumes,hosts,hostname)
+                c = imgtype(sec,ip,port,image,version,onstart,upfile,volumes,hosts,hostname,env,privileged)
                 #tup = {version:c}
                 self.li[sec] = c
             else:

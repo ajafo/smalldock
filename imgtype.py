@@ -5,7 +5,7 @@ class imgtype:
 
 
 
-    def __init__(self, name,ip,port,image,version,onstart,upfile,volumes,hosts,hostname):
+    def __init__(self, name,ip,port,image,version,onstart,upfile,volumes,hosts,hostname,env,privileged):
          self.name = name
          self.ip_pool = ip.split(',')
          self.port = port
@@ -19,6 +19,8 @@ class imgtype:
          self.volumes = volumes.split(',')
          self.hosts = hosts.split(',')
          self.hostname = hostname
+         self.env = env.split(',')
+         self.privileged = privileged
 
 
     def addExtIp(self,id,ip):
@@ -87,3 +89,9 @@ class imgtype:
 
     def getPort(self):
         return self.port
+
+    def getEnv(self):
+        return self.env
+
+    def getPrivileged(self):
+        return self.privileged

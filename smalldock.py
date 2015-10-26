@@ -27,7 +27,7 @@ def instance_monitor():
         time.sleep(15)
         for (c,d) in conf.li.items():
             if d.toStartInst() != 0:
-                thread = threading.Thread(target=runInstances, args=(c, d.getVersion(), d.toStartInst(),d.getVolumes(),d.getHosts(),d.getHostname()))
+                thread = threading.Thread(target=runInstances, args=(c, d.getVersion(), d.toStartInst(),d.getVolumes(),d.getHosts(),d.getHostname(),d.getEnv(),d.getPrivileged()))
                 thread.daemon = True
                 thread.start()
             else:
@@ -102,7 +102,7 @@ def stopInstance(inst,id,version):
 
 
 
-def runInstances(inst, ver, count, vol,hosts,hostname):
+def runInstances(inst, ver, count, vol, hosts, hostname, env, privileged):
     if inst in conf.li.keys():
         print 'Start instance ' + inst + ":" + ver, count
         for c in range(0,int(count)):
@@ -165,9 +165,17 @@ def runInstances(inst, ver, count, vol,hosts,hostname):
                 if h != "":
                     host_tab = host_tab + " --add-host " + h
 
+            env_tab = ""
+            for e in env:
+                if e != "":
+                    env_tab = env_tab + " -e " + e
 
+            prv=""
+            print "privileged:" + privileged
+            if privileged != "":
+                prv = " --privileged "
 
-            command = "docker run -d " + hostname + volumes_dirs + host_tab + " " + \
+            command = "docker run -d " + env_tab + hostname + volumes_dirs + host_tab + prv +" " + \
                       inst + ":" + ver
             print command
             os.system(command)
@@ -184,7 +192,7 @@ getSystemContainters()
 
 
 for (c,d) in conf.li.items():
-   thread = threading.Thread(target=runInstances, args=(c,d.getVersion(),d.toStartInst(),d.getVolumes(),d.getHosts(),d.getHostname()))
+   thread = threading.Thread(target=runInstances, args=(c,d.getVersion(),d.toStartInst(),d.getVolumes(),d.getHosts(),d.getHostname(),d.getEnv(),d.getPrivileged()))
    thread.daemon = True
    thread.start()
 
